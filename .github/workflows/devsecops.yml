@@ -1,0 +1,8 @@
+name: DevSecOpsCI
+
+on:
+    push:
+        branches: [ master ]
+
+jobs:
+
