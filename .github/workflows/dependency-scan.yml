@@ -21,9 +21,22 @@ jobs:
                     -Dformat=HTML \
                     -DfailBuildOnCVSS=7
 
+            - name: Check Dependency Check Report
+              if: always()
+              run: |
+               echo "Current directory:"
+               pwd
+
+               echo "Files under target:"
+               find target -maxdepth 3 -type f 2>/dev/null || true
+
             - name: Upload Dependency Check Report
               if: always()
               uses: actions/upload-artifact@v4
               with:
                 name: dependency-check-report
-                path: target/dependency-check-report.html
+                path: |
+                    target/dependency-check-report.html
+                    target/dependency-check-report.xml
+                    target/dependency-check-report.json
+                if-no-files-found: warn
