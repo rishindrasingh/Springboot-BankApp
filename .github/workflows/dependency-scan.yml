@@ -1,0 +1,29 @@
+name: DependencyScan
+on:
+    workflow_call:
+
+jobs:
+    dependency-scan:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v7
+
+            - name: Set up Java
+              uses: actions/setup-java@v3
+              with:
+                    distribution: 'temurin'
+                    java-version: '17'
+
+            - name: Run OWASP Dependency Check  
+              run: |
+                mvn dependency-check:check \
+                    -Dformat=HTML \
+                    -DfailBuildOnCVSS=7
+
+            - name: Upload Dependency Check Report
+              if: always()
+              uses: actions/upload-artifact@v3
+              with:
+                name: dependency-check-report
+                path: target/dependency-check-report.html
