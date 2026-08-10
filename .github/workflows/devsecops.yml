@@ -2,7 +2,7 @@ name: DevSecOpsCI
 
 on:
     push:
-        branches: [ master ]
+        branches: [ DevOps ]
 
 jobs:
     Code-Quality:
