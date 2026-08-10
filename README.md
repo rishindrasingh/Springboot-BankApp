@@ -1,5 +1,4 @@
 ## End-to-End Bank Application Deployment using DevSecOps on AWS EKS
-## This branch is backup of devops main branch. No file is changed in this branch
 - This is a multi-tier bank an application written in Java (Springboot).
 
 ![Login diagram](images/login.png)
