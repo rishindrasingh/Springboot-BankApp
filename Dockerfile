@@ -14,6 +14,7 @@ RUN mvn clean install -DskipTests=true
 FROM eclipse-temurin:17-jre-alpine AS deployer
 
 # Install curl for healthchecks (lightweight alternative to wget on Alpine)
+# hadolint ignore=DL3018
 RUN apk add --no-cache dumb-init curl && \
     addgroup -S appgroup && \
     adduser -S appuser -G appgroup && \
@@ -34,7 +35,7 @@ USER appuser
 
 # Use curl instead of wget (built-in to Alpine via libc, lighter)
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:8080/actuator/health || exit 1
+  CMD ["curl", "-f", "http://localhost:8080/actuator/health"]
 
 # Run with read-only root filesystem support
 ENTRYPOINT ["dumb-init", "java", "-XX:+UseStringDeduplication", "-XX:MaxRAMPercentage=75", "-jar", "bankapp.jar"]
