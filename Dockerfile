@@ -19,7 +19,7 @@ RUN apk add --no-cache dumb-init curl && \
     addgroup -S appgroup && \
     adduser -S appuser -G appgroup && \
     # Remove setuid/setgid bits for security hardening
-    find / -xdev -perm /6000 -type f -exec chmod a-s {} + 2>/dev/null || true
+    find / -xdev -perm /6000 -type f -exec chmod a-s {} + 2>/dev/null; true
 
 WORKDIR /app
 
