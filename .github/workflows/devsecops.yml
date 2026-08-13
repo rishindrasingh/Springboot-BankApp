@@ -13,3 +13,7 @@ jobs:
     #    uses: ./.github/workflows/dependency-scan.yml
     Docker-Scans:
         uses: ./.github/workflows/docker-scans.yml
+        secrets: inherit
+    Sonar-Scan:
+        uses: ./.github/workflows/sonar-scan.yml
+        secrets: inherit
