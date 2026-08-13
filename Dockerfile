@@ -21,17 +21,27 @@ COPY . .
 # Build application
 RUN mvn clean install -DskipTests=true
 
-FROM dhi.io/eclipse-temurin:17-jre-alpine-dev AS deployer
+FROM alpine:3.20
 
-# Install security updates and necessary packages
+# Install Java runtime and security packages
 # hadolint ignore=DL3018
-RUN apk update && \
-    apk upgrade && \
-    apk add --no-cache dumb-init curl && \
+RUN apk add --no-cache \
+    openjdk17-jre-headless \
+    dumb-init \
+    curl \
+    ca-certificates \
+    tzdata && \
     rm -rf /var/cache/apk/* && \
+    # Create non-root user for runtime
     addgroup -S appgroup && \
     adduser -S appuser -G appgroup && \
-    find / -xdev -perm /6000 -type f -exec chmod a-s {} + 2>/dev/null; true
+    # Remove unnecessary binaries to reduce attack surface
+    find / -xdev \( -name "*.apk" -o -name "*.tar*" \) -delete 2>/dev/null || true && \
+    # Remove setuid/setgid bits for security hardening
+    find / -xdev -perm /6000 -type f -exec chmod a-s {} + 2>/dev/null || true && \
+    # Set restrictive permissions on sensitive directories
+    chmod 700 /root && \
+    chmod 755 /home
 
 WORKDIR /app
 
@@ -46,7 +56,7 @@ EXPOSE 8080
 
 USER appuser
 
-# Health check with curl
+# Health check with curl and explicit failure on non-200 response
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD ["curl", "-sf", "http://localhost:8080/actuator/health"]
 
