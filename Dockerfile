@@ -22,7 +22,7 @@ RUN mvn clean install -DskipTests=true
 #--------------------------------------
 
 # Import small size java image
-FROM openjdk:17-alpine as deployer
+FROM eclipse-temurin:17-jre-alpine AS deployer
 
 # Copy build from stage 1 (builder)
 COPY --from=builder /src/target/*.jar /src/target/bankapp.jar
