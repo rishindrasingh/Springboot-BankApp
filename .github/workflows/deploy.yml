@@ -1,0 +1,24 @@
+name: Deploy
+on:
+    workflow_call: 
+
+jobs:
+    Code-Deploy:
+        runs-on: self-hosted
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v7
+            
+            - name: Log in to DockerHub
+              uses: docker/login-action@v2
+              with:
+                username: ${{ vars.DOCKERHUB_USERNAME }}
+                password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+            - name: Copy the env file
+              run: |
+                    cp .env.example .env
+            
+            - name: Deploy Docker Compose
+              run: |
+                        docker compose up -d

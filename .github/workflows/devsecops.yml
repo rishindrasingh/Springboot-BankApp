@@ -20,3 +20,6 @@ jobs:
     Image-Push:
         uses: ./.github/workflows/image-push.yml
         secrets: inherit
+    Deploy:
+        uses: ./.github/workflows/deploy.yml
+        secrets: inherit
