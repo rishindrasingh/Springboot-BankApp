@@ -17,3 +17,6 @@ jobs:
     Sonar-Scan:
         uses: ./.github/workflows/sonar-scan.yml
         secrets: inherit
+    Image-Push:
+        uses: ./.github/workflows/image-push.yml
+        secrets: inherit
