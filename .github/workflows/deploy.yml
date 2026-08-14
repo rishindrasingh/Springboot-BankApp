@@ -15,10 +15,6 @@ jobs:
                 username: ${{ vars.DOCKERHUB_USERNAME }}
                 password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-            - name: Copy the env file
-              run: |
-                    cp .env.example .env
-            
+          
             - name: Deploy Docker Compose
-              run: |
-                        docker compose up -d
+              run: docker compose up -d
