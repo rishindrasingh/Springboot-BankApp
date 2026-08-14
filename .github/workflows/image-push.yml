@@ -1,0 +1,23 @@
+name: ImagePush
+
+on:
+  workflow_call:
+
+jobs:
+  docker-image-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build \
+            -t ${{ vars.DOCKERHUB_USERNAME }}/bankapp:latest .
+          docker push ${{ vars.DOCKERHUB_USERNAME }}/bankapp:latest
