@@ -1,12 +1,16 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
+
 metadata:
   name: bankapp-pvc
   namespace: bankapp
+
 spec:
+  accessModes:
+    - ReadWriteOnce
+
+  storageClassName: gp3
+
   resources:
     requests:
       storage: 10Gi
-  storageClassName: standard
-  accessModes:
-    - ReadWriteOnce
