@@ -9,7 +9,10 @@ spec:
   accessModes:
     - ReadWriteOnce
 
-  storageClassName: gp3
+  #storageClassName: gp3
+  
+  storageClassName: standard
+
 
   resources:
     requests:
