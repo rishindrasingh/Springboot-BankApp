@@ -1,0 +1,20 @@
+# If you create StorageClass with gp3 type, you can use this StorageClass in your PVCs to create gp3 EBS volumes. This StorageClass is configured to use the AWS EBS CSI driver for provisioning gp3 volumes.
+# There is no need to create a PV again . Kubernetes will automatically create a PV when you create a PVC that uses this StorageClass.
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+
+metadata:
+  name: gp3
+
+provisioner: ebs.csi.aws.com
+
+parameters:
+  type: gp3
+  encrypted: "true"
+  fsType: ext4
+
+reclaimPolicy: Retain
+
+volumeBindingMode: WaitForFirstConsumer
+
+allowVolumeExpansion: true
