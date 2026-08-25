@@ -1,16 +1,50 @@
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: argocd-ingress
+#   namespace: argocd
+#   annotations:
+#     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+#     nginx.ingress.kubernetes.io/ssl-redirect: "false"
+#     nginx.ingress.kubernetes.io/websocket-services: "argocd-server"
+#     nginx.ingress.kubernetes.io/proxy-read-timeout: "86400"
+#     nginx.ingress.kubernetes.io/proxy-send-timeout: "86400"
+# spec:
+#   ingressClassName: nginx
+#   rules:
+#   - host: argocd.rishindra.shop
+#     http:
+#       paths:
+#       - pathType: Prefix
+#         path: /
+#         backend:
+#           service:
+#             name: argocd-server
+#             port: 
+#               number: 443
+
+
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: argocd-ingress
   namespace: argocd
   annotations:
+    # 1. Force HTTP -> HTTPS redirect
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # 2. Automatically request/bind cert-manager certificate
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # 3. Tell NGINX to talk to ArgoCD backend over HTTPS
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/websocket-services: "argocd-server"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "86400"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "86400"
 spec:
   ingressClassName: nginx
+  tls:
+  - hosts:
+    - argocd.rishindra.shop
+    secretName: argocd-tls-secret   # <--- Must match your TLS secret
   rules:
   - host: argocd.rishindra.shop
     http:
@@ -20,5 +54,5 @@ spec:
         backend:
           service:
             name: argocd-server
-            port: 
+            port:
               number: 443
