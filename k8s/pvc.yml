@@ -17,4 +17,5 @@ spec:
   resources:
     requests:
       storage: 10Gi
-      mountPath: /data
+
+
