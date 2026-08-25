@@ -21,7 +21,7 @@ jobs:
         needs: [Code-Quality, Secret-Scanning, Docker-Scans, Sonar-Scan]
         uses: ./.github/workflows/image-push.yml
         secrets: inherit
-    Deploy:
-        needs: [Code-Quality, Secret-Scanning, Docker-Scans, Sonar-Scan, Image-Push]
-        uses: ./.github/workflows/deploy.yml
-        secrets: inherit
+    # Deploy:
+    #     needs: [Code-Quality, Secret-Scanning, Docker-Scans, Sonar-Scan, Image-Push]
+    #     uses: ./.github/workflows/deploy.yml
+    #     secrets: inherit
