@@ -7,9 +7,21 @@ metadata:
     name: bankapp-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+        # 1. Force HTTP -> HTTPS redirect
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # 2. Automatically request/bind cert-manager certificate
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # 3. Tell NGINX to talk to ArgoCD backend over HTTPS
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    #nginx.ingress.kubernetes.io/websocket-services: "argocd-server"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "86400"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "86400"
 spec:
   ingressClassName: nginx
+  tls:
+  - hosts:
+    - bankapp.rishindra.shop
+    secretName: bankapp-tls-secret
   rules:
   - host: bankapp.rishindra.shop
     http:
